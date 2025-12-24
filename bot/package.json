@@ -1,0 +1,31 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@grammyjs/ratelimiter": "^1.2.1",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "axios": "^1.13.2",
+    "bullmq": "^5.66.1",
+    "express": "^5.2.1",
+    "grammy": "^1.38.4",
+    "ioredis": "^5.8.2",
+    "nodemon": "^3.1.11",
+    "pg": "^8.16.3",
+    "prisma": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/pg": "^8.16.0",
+    "dotenv": "^17.2.3"
+  }
+}

@@ -1,0 +1,85 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model UploadSession {
+  id              String        @id @default(cuid())
+  userId          BigInt
+  
+  // 狀態管理
+  status          SessionStatus @default(COLLECTING)
+  
+  // 分享資訊
+  title           String?
+  keyword         String?       // 單一關鍵字
+  shareCode       String?       @unique // 分享碼
+  shareLink       String?       // 分享連結
+  
+  // 設定
+  preventForward  Boolean       @default(false)
+  
+  // 統計
+  totalFiles      Int           @default(0)
+  totalSize       BigInt        @default(0)
+  
+  // 檔案
+  files           MediaFile[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([userId, status])
+  @@index([shareCode])
+  @@index([keyword])
+}
+
+model MediaFile {
+  id              String         @id @default(cuid())
+  sessionId       String
+  session         UploadSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  // 檔案資訊
+  telegramFileId  String
+  fileType        MediaType
+  fileName        String?
+  fileSize        BigInt?
+  mimeType        String?
+  
+  // Caption 和順序
+  caption         String?
+  captionEntities Json?
+  order           Int            @default(0)
+  
+  // 原始訊息
+  messageId       Int
+  chatId          BigInt
+  
+  // 分組標記
+  groupIndex      Int            @default(0) // 第幾組上傳
+  mediaGroupId    String?        // Telegram 媒體群組 ID
+  
+  createdAt       DateTime       @default(now())
+  
+  @@index([sessionId])
+  @@index([mediaGroupId])
+}
+
+enum SessionStatus {
+  COLLECTING   // 收集檔案中
+  SETTING      // 設定標題中
+  COMPLETED    // 已完成
+  CANCELLED    // 已取消
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  DOCUMENT
+  AUDIO
+  VOICE
+}

@@ -1,0 +1,451 @@
+📩 Received update: 332223263 [message]
+📝 Text: /start
+📩 Received update: 332223264 [message]
+📝 Text: /start
+📩 Received update: 332223265 [callback_query]
+📩 Received update: 332223266 [message]
+Context {
+  update: {
+    update_id: 332223266,
+    message: {
+      message_id: 396,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518272317',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223267 [message]
+Context {
+  update: {
+    update_id: 332223267,
+    message: {
+      message_id: 397,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223268 [message]
+Context {
+  update: {
+    update_id: 332223268,
+    message: {
+      message_id: 398,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518272317',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223269 [message]
+Context {
+  update: {
+    update_id: 332223269,
+    message: {
+      message_id: 399,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223270 [message]
+Context {
+  update: {
+    update_id: 332223270,
+    message: {
+      message_id: 400,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518272317',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223271 [message]
+Context {
+  update: {
+    update_id: 332223271,
+    message: {
+      message_id: 401,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223272 [message]
+Context {
+  update: {
+    update_id: 332223272,
+    message: {
+      message_id: 402,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223273 [message]
+Context {
+  update: {
+    update_id: 332223273,
+    message: {
+      message_id: 403,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+🔄 Processing media group: 14132480518272317
+📩 Received update: 332223274 [message]
+Context {
+  update: {
+    update_id: 332223274,
+    message: {
+      message_id: 404,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223275 [message]
+Context {
+  update: {
+    update_id: 332223275,
+    message: {
+      message_id: 405,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+✅ Completed: process_14132480518272317
+📩 Received update: 332223276 [message]
+Context {
+  update: {
+    update_id: 332223276,
+    message: {
+      message_id: 406,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223277 [message]
+Context {
+  update: {
+    update_id: 332223277,
+    message: {
+      message_id: 407,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+📩 Received update: 332223278 [message]
+Context {
+  update: {
+    update_id: 332223278,
+    message: {
+      message_id: 408,
+      from: [Object],
+      chat: [Object],
+      date: 1766560064,
+      media_group_id: '14132480518392917',
+      photo: [Array]
+    }
+  },
+  api: Api {
+    token: '8583662109:AAGD_2yYg2WQDn0cvKEZVKDSwjRPSPuUXLM',
+    options: undefined,
+    raw: {},
+    config: {
+      use: [Function: use],
+      installedTransformers: [Function: installedTransformers]
+    }
+  },
+  me: {
+    id: 8583662109,
+    is_bot: true,
+    first_name: 'testkloudbot',
+    username: 'testkloudbot',
+    can_join_groups: true,
+    can_read_all_group_messages: false,
+    supports_inline_queries: false,
+    can_connect_to_business: false,
+    has_main_web_app: false
+  }
+}
+🔄 Processing media group: 14132480518392917
+✅ Completed: process_14132480518392917
