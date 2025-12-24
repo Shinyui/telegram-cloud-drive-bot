@@ -79,6 +79,33 @@ class RedisSessionManager {
     };
   }
 
+  static async claimMediaGroup(mediaGroupId) {
+    const key = this.mediaGroupKey(mediaGroupId);
+    const metaKey = this.mediaGroupMetaKey(mediaGroupId);
+
+    // 原子操作：獲取所有文件並刪除列表，同時獲取元數據
+    const results = await redis
+      .multi()
+      .lrange(key, 0, -1)
+      .del(key)
+      .hgetall(metaKey)
+      .exec();
+
+    // results[0] 是 lrange 的結果 [error, result]
+    // results[1] 是 del 的結果
+    // results[2] 是 hgetall 的結果
+
+    const filesJson = results[0][1];
+    const meta = results[2][1];
+
+    return {
+      files: filesJson.map((json) => JSON.parse(json)),
+      sessionId: meta.sessionId,
+      chatId: meta.chatId,
+      groupIndex: parseInt(meta.groupIndex) || 0,
+    };
+  }
+
   static async deleteMediaGroup(mediaGroupId) {
     const key = this.mediaGroupKey(mediaGroupId);
     const metaKey = this.mediaGroupMetaKey(mediaGroupId);

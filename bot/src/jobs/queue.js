@@ -29,6 +29,7 @@ const scheduleMediaGroupProcessing = async (
   delayMs = 1000
 ) => {
   const jobId = `process_${mediaGroupId}`;
+  let targetJobId = jobId;
 
   // 嘗試移除舊的 Job 以實現 Debounce
   try {
@@ -37,8 +38,19 @@ const scheduleMediaGroupProcessing = async (
       await job.remove();
     }
   } catch (error) {
-    // 忽略移除錯誤
-    console.error("Error removing job:", error);
+    // 如果移除失敗（通常是因為正在處理中），則安排一個後續任務
+    console.log(`Job ${jobId} is active/locked, scheduling next job...`);
+    targetJobId = `process_${mediaGroupId}_next`;
+
+    // 嘗試 Debounce 後續任務
+    try {
+      const nextJob = await mediaGroupQueue.getJob(targetJobId);
+      if (nextJob) {
+        await nextJob.remove();
+      }
+    } catch (e) {
+      console.log(`Next job ${targetJobId} could not be removed:`, e.message);
+    }
   }
 
   return mediaGroupQueue.add(
@@ -46,7 +58,7 @@ const scheduleMediaGroupProcessing = async (
     { mediaGroupId, chatId, sessionId, groupIndex },
     {
       delay: delayMs,
-      jobId: jobId,
+      jobId: targetJobId,
     }
   );
 };

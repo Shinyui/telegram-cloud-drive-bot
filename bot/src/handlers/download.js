@@ -218,6 +218,12 @@ const sendFiles = async (ctx, session, bot) => {
               case "VOICE":
                 await ctx.replyWithVoice(f.telegramFileId, options);
                 break;
+              case "PHOTO":
+                await ctx.replyWithPhoto(f.telegramFileId, options);
+                break;
+              case "VIDEO":
+                await ctx.replyWithVideo(f.telegramFileId, options);
+                break;
               default:
                 await ctx.replyWithDocument(f.telegramFileId, options);
             }

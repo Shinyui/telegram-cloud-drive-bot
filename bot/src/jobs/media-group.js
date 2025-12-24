@@ -19,12 +19,14 @@ const mediaGroupWorker = new Worker(
     const lockId = await RedisSessionManager.acquireLock(mediaGroupId, 10);
 
     if (!lockId) {
-      console.log(`⏭️  Already processing: ${mediaGroupId}`);
-      return { skipped: true };
+      console.log(
+        `⏭️  Already processing (locked): ${mediaGroupId}, retrying later...`
+      );
+      throw new Error("Media group locked");
     }
 
     try {
-      const { files } = await RedisSessionManager.getMediaGroup(mediaGroupId);
+      const { files } = await RedisSessionManager.claimMediaGroup(mediaGroupId);
 
       if (files.length === 0) {
         return { alreadyProcessed: true };
@@ -81,7 +83,7 @@ const mediaGroupWorker = new Worker(
         }
       );
 
-      await RedisSessionManager.deleteMediaGroup(mediaGroupId);
+      // await RedisSessionManager.deleteMediaGroup(mediaGroupId);
 
       return { success: true, fileCount: files.length };
     } catch (error) {
