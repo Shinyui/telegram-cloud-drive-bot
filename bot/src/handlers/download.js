@@ -202,7 +202,7 @@ const sendFiles = async (ctx, session, bot) => {
       while (i < files.length) {
         const f = files[i];
 
-        if (!isAlbumCapable(f)) {
+        if (!isAlbumCapable(f) || !f.mediaGroupId) {
           try {
             const options = {
               caption: f.caption || undefined,
@@ -231,12 +231,12 @@ const sendFiles = async (ctx, session, bot) => {
           continue;
         }
 
-        const currentType = f.fileType; // PHOTO or VIDEO
+        const currentGroupId = f.mediaGroupId;
         const run = [];
         while (
           i < files.length &&
           isAlbumCapable(files[i]) &&
-          files[i].fileType === currentType
+          files[i].mediaGroupId === currentGroupId
         ) {
           run.push(files[i]);
           i++;
@@ -246,7 +246,7 @@ const sendFiles = async (ctx, session, bot) => {
           for (let j = 0; j < run.length; j += 10) {
             const chunk = run.slice(j, j + 10);
             const media = chunk.map((mf) =>
-              currentType === "PHOTO"
+              mf.fileType === "PHOTO"
                 ? {
                     type: "photo",
                     media: mf.telegramFileId,
@@ -270,7 +270,7 @@ const sendFiles = async (ctx, session, bot) => {
                     caption: mf.caption || undefined,
                     protect_content: effectivePrevent,
                   };
-                  if (currentType === "PHOTO") {
+                  if (mf.fileType === "PHOTO") {
                     await ctx.replyWithPhoto(mf.telegramFileId, options);
                   } else {
                     await ctx.replyWithVideo(mf.telegramFileId, options);
@@ -293,7 +293,7 @@ const sendFiles = async (ctx, session, bot) => {
                 caption: single.caption || undefined,
                 protect_content: effectivePrevent,
               };
-              if (currentType === "PHOTO") {
+              if (single.fileType === "PHOTO") {
                 await ctx.replyWithPhoto(single.telegramFileId, options);
               } else {
                 await ctx.replyWithVideo(single.telegramFileId, options);
