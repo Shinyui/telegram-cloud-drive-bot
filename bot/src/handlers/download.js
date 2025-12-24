@@ -223,10 +223,11 @@ const sendFiles = async (ctx, session, bot) => {
             }
             sentCount++;
           } catch (error) {
+            console.error(`Failed to send file ${f.fileName}:`, error);
             failedCount++;
             await ctx.reply(`❌ ${f.fileName || "文件"} 发送失败`);
           }
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 50));
           i++;
           continue;
         }
@@ -277,13 +278,17 @@ const sendFiles = async (ctx, session, bot) => {
                   }
                   sentCount++;
                 } catch (err) {
+                  console.error(
+                    `Failed to send individual media item ${mf.fileName}:`,
+                    err
+                  );
                   failedCount++;
                   await ctx.reply(`❌ ${mf.fileName || "文件"} 发送失败`);
                 }
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await new Promise((resolve) => setTimeout(resolve, 50));
               }
             }
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            await new Promise((resolve) => setTimeout(resolve, 50));
           }
         } else {
           const single = run[0];
@@ -300,10 +305,14 @@ const sendFiles = async (ctx, session, bot) => {
               }
               sentCount++;
             } catch (error) {
+              console.error(
+                `Failed to send single media item ${single.fileName}:`,
+                error
+              );
               failedCount++;
               await ctx.reply(`❌ ${single.fileName || "文件"} 发送失败`);
             }
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            await new Promise((resolve) => setTimeout(resolve, 50));
           }
         }
       }

@@ -108,7 +108,7 @@ const handleMediaUpload = async (ctx, mediaType, bot) => {
         chatId,
         session.id,
         currentGroupIndex,
-        3000 // 增加延遲時間到 3 秒
+        1000 // 減少延遲時間到 1 秒
       );
     } catch (error) {
       console.error("Schedule error:", error);
