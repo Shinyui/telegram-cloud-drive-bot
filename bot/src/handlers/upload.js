@@ -74,15 +74,48 @@ const registerUploadHandlers = (bot) => {
   bot.callbackQuery("upload_complete", async (ctx) => {
     await ctx.answerCallbackQuery();
 
-    const redisSession = await RedisSessionManager.getActiveSession(
-      ctx.from.id
-    );
+    const userId = ctx.from.id;
+    const redisSession = await RedisSessionManager.getActiveSession(userId);
 
     if (!redisSession) {
       return ctx.editMessageText("❌ Session 已过期");
     }
 
-    const session = await UploadSessionManager.getActive(ctx.from.id);
+    // --- 關鍵修改：從 Redis 暫存區一次性入庫 ---
+    
+    // 1. 獲取所有暫存文件
+    const files = await RedisSessionManager.getSessionFiles(userId);
+    
+    if (!files || files.length === 0) {
+      // 雙重檢查：如果 Redis 沒文件，看看資料庫裡是否已經有了 (應對極端情況)
+      const dbSession = await UploadSessionManager.getActive(userId);
+      if (!dbSession || dbSession.totalFiles === 0) {
+        return ctx.editMessageText("❌ 还没有上传任何文件");
+      }
+      // 如果 DB 有文件但 Redis 沒有，說明可能已經部分入庫或數據異常，繼續流程
+    } else {
+      // 2. 批量入庫
+      const session = await UploadSessionManager.getActive(userId);
+      
+      // 按消息ID排序，確保順序正確
+      files.sort((a, b) => a.messageId - b.messageId);
+      
+      await UploadSessionManager.addFiles(
+        session.id,
+        files,
+        0, // 這裡 groupIndex 其實已經在 file 對象裡了，但 addFiles 接口目前可能覆蓋它
+           // 我們需要稍微修改 addFiles 或者這裡分組處理
+           // 簡單起見，我們假設 files 裡的 groupIndex 是正確的，修改 addFiles 讓它優先使用 file 裡的
+        null
+      );
+      
+      // 3. 清空 Redis 暫存
+      await RedisSessionManager.clearSessionFiles(userId);
+    }
+
+    // --- 修改結束 ---
+
+    const session = await UploadSessionManager.getActive(userId);
 
     if (!session || session.totalFiles === 0) {
       return ctx.editMessageText("❌ 还没有上传任何文件");
@@ -90,7 +123,7 @@ const registerUploadHandlers = (bot) => {
 
     // 更新狀態
     await UploadSessionManager.updateStatus(session.id, "SETTING");
-    await RedisSessionManager.updateSession(ctx.from.id, {
+    await RedisSessionManager.updateSession(userId, {
       status: "SETTING",
     });
 

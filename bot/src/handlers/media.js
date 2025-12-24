@@ -86,8 +86,18 @@ const handleMediaUpload = async (ctx, mediaType, bot) => {
   const currentGroupIndex = session.currentGroupIndex || 0;
 
   // 處理媒體群組 vs 單一檔案
+  // 無論是單一文件還是媒體群組，都先存入 Redis 暫存列表
+
+  // 為了保持和原有 groupIndex 邏輯兼容，我們將 fileData 增加 groupIndex
+  fileData.groupIndex = currentGroupIndex;
+  fileData.mediaGroupId = mediaGroupId || null;
+
+  // 1. 存入 Redis 用戶暫存列表
+  await RedisSessionManager.addFileToSession(userId, fileData);
+
+  // 2. 如果是媒體群組，仍然需要 Debounce 處理來發送「匯總通知」
   if (mediaGroupId) {
-    // 添加到 Redis
+    // 添加到 MediaGroup (為了計算數量和 Debounce)
     await RedisSessionManager.addToMediaGroup(
       mediaGroupId,
       fileData,
@@ -95,61 +105,41 @@ const handleMediaUpload = async (ctx, mediaType, bot) => {
       currentGroupIndex
     );
 
-    // 取得當前數量
-    const { files } = await RedisSessionManager.getMediaGroup(mediaGroupId);
-
-    // 移除中間狀態的通知訊息逻辑
-    // 我們現在完全依賴 Worker 在處理完成後發送最終匯總通知
-
-    // 排程處理 - 確保參數正確
+    // 排程處理通知（只更新 UI，不入庫）
     try {
       await scheduleMediaGroupProcessing(
         mediaGroupId,
         chatId,
         session.id,
         currentGroupIndex,
-        1000 // 減少延遲時間到 1 秒
+        1000
       );
     } catch (error) {
       console.error("Schedule error:", error);
-      // 如果 BullMQ 有問題，直接處理
-      await processMediaGroupDirectly(
-        mediaGroupId,
-        chatId,
-        session.id,
-        currentGroupIndex,
-        bot
-      );
     }
   } else {
-    // 單一檔案：直接儲存
-    await UploadSessionManager.addFiles(
-      session.id,
-      [fileData],
-      currentGroupIndex,
-      null
-    );
+    // 單一文件：直接發送/更新通知
+    // 獲取當前暫存文件數量
+    const currentFiles = await RedisSessionManager.getSessionFiles(userId);
+    const totalCount = currentFiles.length;
 
-    // 取得更新後的 session
-    const updatedSession = await UploadSessionManager.getActive(userId);
+    // 這裡可以選擇：每發一個文件都發一條通知，或者嘗試編輯上一條通知
+    // 為了簡單且反饋即時，單文件我們直接發送一條狀態消息，或者編輯「收集消息」
 
-    // 統計本次（其實就這一個）檔案類型
-    const typeStats = { [fileData.type]: 1 };
-    const statsText = Object.entries(typeStats)
-      .map(([type, count]) => `• ${type}: ${count}`)
-      .join("\n");
+    // 嘗試獲取最後一條收集狀態消息 ID (這裡簡化處理，直接發送新消息，用戶體驗類似「一次性」是因為我們稍後會刪除這些消息或只保留最後一條)
+    // 但為了達到「一次性入庫」的感覺，我們這裡發送一個「已添加到暫存區」的提示，或者什麼都不發（如果用戶發很快）
 
-    // 發送確認訊息
+    // 為了讓用戶知道機器人活著，我們發送一個帶有「完成存儲」按鈕的消息
+    // 如果用戶連續發送，這條消息會被刷下去，但這是 Telegram 的限制
     await ctx.reply(
-      `✅ 正在接收文件...请确保所有文件都已发送完毕\n` +
-        `📁 总计共添加 ${updatedSession.totalFiles} 个文件\n` +
-        `📊 本次接收：\n${statsText}\n\n` +
-        `继续发送更多文件，或选择操作：`,
+      `✅ 已暫存 1 個文件 (總暫存: ${totalCount} 個)\n` +
+        `請繼續發送，或點擊「完成存儲」結束。`,
       { reply_markup: uploadCollectingKeyboard() }
     );
   }
 };
 
+// 用於更新 UI 的函數 (不再負責入庫)
 const processMediaGroupDirectly = async (
   mediaGroupId,
   chatId,
@@ -157,42 +147,7 @@ const processMediaGroupDirectly = async (
   groupIndex,
   bot
 ) => {
-  const lockId = await RedisSessionManager.acquireLock(mediaGroupId, 10);
-
-  if (!lockId) return;
-
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const { files } = await RedisSessionManager.getMediaGroup(mediaGroupId);
-
-    if (files.length === 0) return;
-
-    files.sort((a, b) => a.messageId - b.messageId);
-
-    await UploadSessionManager.addFiles(
-      sessionId,
-      files,
-      groupIndex,
-      mediaGroupId
-    );
-
-    const updatedSession = await UploadSessionManager.getActive(
-      files[0].chatId
-    );
-
-    await bot.api.sendMessage(
-      chatId,
-      `✅ 正在接收文件...请确保所有文件都已发送完毕\n` +
-        `📁 总计共添加 ${updatedSession.totalFiles} 个文件\n\n` +
-        `继续发送更多文件，或选择操作：`,
-      { reply_markup: uploadCollectingKeyboard() }
-    );
-
-    await RedisSessionManager.deleteMediaGroup(mediaGroupId);
-  } finally {
-    await RedisSessionManager.releaseLock(mediaGroupId, lockId);
-  }
+  // 這裡不再需要實現，因為我們完全依賴 Worker 來做 UI 更新
 };
 
 const registerMediaHandlers = function (bot) {

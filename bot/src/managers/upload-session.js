@@ -53,8 +53,9 @@ class UploadSessionManager {
           order: index,
           messageId: file.messageId,
           chatId: BigInt(file.chatId),
-          groupIndex,
-          mediaGroupId,
+          // 優先使用文件自帶的 groupIndex 和 mediaGroupId
+          groupIndex: file.groupIndex !== undefined ? file.groupIndex : groupIndex,
+          mediaGroupId: file.mediaGroupId || mediaGroupId,
         })),
       });
 

@@ -26,64 +26,37 @@ const mediaGroupWorker = new Worker(
     }
 
     try {
+      // 這裡只做 claim (清空 media group 列表)，不入庫
       const { files } = await RedisSessionManager.claimMediaGroup(mediaGroupId);
 
       if (files.length === 0) {
         return { alreadyProcessed: true };
       }
 
-      files.sort((a, b) => a.messageId - b.messageId);
-
-      await UploadSessionManager.addFiles(
-        sessionId,
-        files,
-        groupIndex,
-        mediaGroupId
-      );
-
-      const updatedSession = await UploadSessionManager.getActive(
-        (
-          await bot.api.getChat(chatId)
-        ).id
-      );
-
-      // 統計本次接收的檔案類型
-      const typeStats = {};
-      let totalSize = 0;
-      files.forEach((f) => {
-        typeStats[f.type] = (typeStats[f.type] || 0) + 1;
-        totalSize += f.fileSize || 0;
-      });
-
-      const statsText = Object.entries(typeStats)
-        .map(([type, count]) => `• ${type}: ${count}`)
-        .join("\n");
-
-      const formatSize = (bytes) => {
-        if (bytes === 0) return "0 B";
-        const k = 1024;
-        const sizes = ["B", "KB", "MB", "GB", "TB"];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-      };
+      // 獲取當前用戶的所有暫存文件，用於計算總數
+      // 注意：這裡我們假設 files[0] 裡有 chatId，然後反查 userId 可能比較麻煩
+      // 但我們可以直接用 session 中的 userId (雖然這裡沒傳，但可以傳)
+      // 或者簡單點，我們只顯示「本次已接收 X 個文件」
+      
+      // 為了更好的體驗，我們獲取一下當前 session 的總文件數
+      // 由於 redis session key 是 userId，我們需要知道 userId
+      // 這裡暫時只顯示本次接收數量，或者修改 job 數據傳入 userId
+      
+      const fileCount = files.length;
 
       await bot.api.sendMessage(
         chatId,
-        `✅ 正在接收文件...请确保所有文件都已发送完毕\n` +
-          `📁 总计共添加 ${updatedSession.totalFiles} 个文件\n` +
-          `📊 本次接收 (${formatSize(totalSize)})：\n${statsText}\n\n` +
-          `继续发送更多文件，或选择操作：`,
+        `✅ 已暫存 ${fileCount} 個文件 (來自媒體群組)\n` +
+        `請繼續發送，或點擊「完成存儲」結束。`,
         {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "✅ 完成存储", callback_data: "upload_complete" }],
+              [{ text: "✅ 完成存儲", callback_data: "upload_complete" }],
               [{ text: "❌ 取消", callback_data: "upload_cancel" }],
             ],
           },
         }
       );
-
-      // await RedisSessionManager.deleteMediaGroup(mediaGroupId);
 
       return { success: true, fileCount: files.length };
     } catch (error) {

@@ -44,6 +44,28 @@ class RedisSessionManager {
     await redis.del(key);
   }
 
+  // 用戶暫存文件列表管理
+  static filesKey(userId) {
+    return `session_files:${userId}`;
+  }
+
+  static async addFileToSession(userId, fileData, ttl = 3600) {
+    const key = this.filesKey(userId);
+    await redis.rpush(key, JSON.stringify(fileData));
+    await redis.expire(key, ttl);
+  }
+
+  static async getSessionFiles(userId) {
+    const key = this.filesKey(userId);
+    const filesJson = await redis.lrange(key, 0, -1);
+    return filesJson.map((json) => JSON.parse(json));
+  }
+
+  static async clearSessionFiles(userId) {
+    const key = this.filesKey(userId);
+    await redis.del(key);
+  }
+
   // 媒體群組管理
   static async addToMediaGroup(
     mediaGroupId,
